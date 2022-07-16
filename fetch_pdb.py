@@ -6,12 +6,17 @@ BASE_URL = "https://data.rcsb.org/rest/v1/core/polymer_entity_instance/"
 HELIX = 'helix'
 SHEET = 'sheet'
 
+
+# base_aminos = [ 'リシン','アルギニン','ヒスチジン' ]
+# acied_amino = [ 'アスパラギン酸', 'グルタミン酸']
+
+
 def get_secondary_structure_residues(pdb_id, chain_index):
   if (chain_index == " "):
     chain_index = "A"
   if (chain_index == "X"):
     chain_index = "A"
-  print(pdb_id + "  " + chain_index)
+  print("PDB_ID: " + pdb_id + "  chain: " + chain_index)
   url = BASE_URL + pdb_id + "/" + chain_index
   res = requests.get(url)
   data = res.json()
@@ -29,7 +34,8 @@ def get_secondary_structure_residues(pdb_id, chain_index):
   asa_list = []
 
   # APIを叩いた結果を見たい場合は以下コメントアウトを外す
-
+  
+  # PDBでrcsb_polymer_instance_featureがないもの
   if ('rcsb_polymer_instance_feature' in data):
     for feature in data['rcsb_polymer_instance_feature']:
       if(('name' in feature) and (feature['name'] == HELIX)):
@@ -61,10 +67,16 @@ def get_secondary_structure_residues(pdb_id, chain_index):
             if(index > pos["end_seq_id"]):
               break
             # 埋もれている: E　埋もれていない: Bにする
-            if(val > avarage):
-              asa_list[index - 1] = "B"
-            else:
+            # 1:sortして上、下で判別
+            # 2:0なら埋もれている,　? > 0 なら埋もれていない
+            if(int(val) == 0):
               asa_list[index - 1] = "E"
+            else:
+              asa_list[index - 1] = "B"
+            # if(val > avarage):
+            #   asa_list[index - 1] = "B"
+            # else:
+            #   asa_list[index - 1] = "E"
             
             # asa_list[index - 1] = int(val)
             index += 1
