@@ -43,7 +43,7 @@ def attend_secondary_info(secondary_info, residues_str):
         secondary_str += 'S'
       else:
         secondary_str += '#'
-      # residue_indexがASAの配列数よりもおお消えればcontinue
+      # residue_indexがASAの配列数より多ければcontinue
       if( residue_index <  len(secondary_info['asa'])):
         new_asa_list.append(secondary_info['asa'][residue_index])
       residue_index += 1
@@ -161,11 +161,21 @@ def output_result(msa_result):
   print(appearance_rates_without_asa_only_secondary)
   return appearance_rates
 
+  return {
+    'appearance_rates': appearance_rates,
+    'appearance_rates_without_asa': appearance_rates_without_asa,
+    'appearance_rates_without_asa_only_secondary': appearance_rates_without_asa_only_secondary
+  }
+
 # "./v3.17"以下のフォルダを全て読み込み、該当するFASTAファイルのパスを抽出
 def search_all_file():
   # # ファイルの中身消去
-  # f = open("output_E_0.csv","w")
-  # f.close()
+  f = open(".2022_07_19/appearance_rates.csv","w")
+  f.close()
+  f = open(".2022_07_19/appearance_rates_without_asa.csv","w")
+  f.close()
+  f = open(".2022_07_19/appearance_rates_without_asa_only_secondary.csv","w")
+  f.close()
 
   files = os.listdir(ROOT_PATH)
   # print(files)
@@ -185,21 +195,36 @@ def search_all_file():
       msa_result = analysis_each_file(path)
       if( len(msa_result) > 1):
         res = output_result( msa_result ) # 出現度合いを表した度合い
+        appearance_rates = res['appearance_rates']
+        appearance_rates_without_asa = res['appearance_rates_without_asa']
+        appearance_rates_without_asa_only_secondary = res['appearance_rates_without_asa_only_secondary']
+
         # 配列の先頭にNCBIのIDを入れる
         ncbi_fam_id = path.split('/')[2]
         ncbi_id = path.split('/')[3].replace(".FASTA", "")
-        res.insert(0, ncbi_id)
-        res.insert(0, ncbi_fam_id)
-        # with open('output_E_0.csv', 'a') as f:
-        #     writer = csv.writer( f )
-        #     writer.writerow( res )
+        appearance_rates.insert(0, ncbi_id)
+        appearance_rates.insert(0, ncbi_fam_id)
+        appearance_rates_without_asa.insert(0, ncbi_id)
+        appearance_rates_without_asa.insert(0, ncbi_fam_id)
+        appearance_rates_without_asa_only_secondary.insert(0, ncbi_id)
+        appearance_rates_without_asa_only_secondary.insert(0, ncbi_fam_id)
 
-## 以下のコメントアウトを外す
-# search_all_file()
+        with open('./2022_07_19/appearance_rates.csv', 'a') as f:
+            writer = csv.writer( f )
+            writer.writerow( appearance_rates )
+        with open('./2022_07_19/appearance_rates_without_asa.csv', 'a') as f:
+            writer = csv.writer( f )
+            writer.writerow( appearance_rates_without_asa )
+        with open('./2022_07_19/appearance_rates_without_asa_only_secondary.csv', 'a') as f:
+            writer = csv.writer( f )
+            writer.writerow( appearance_rates_without_asa_only_secondary )
 
-test_path = './v3.17/cd12120/cd12199.FASTA'
-msa_result = analysis_each_file(test_path)
-if(len(msa_result)== 0):
-  print("あああ")
-res = output_result( msa_result )
+# 以下のコメントアウトを外す
+search_all_file()
+
+# test_path = './v3.17/cd12120/cd12199.FASTA'
+# msa_result = analysis_each_file(test_path)
+# if(len(msa_result)== 0):
+#   print("あああ")
+# res = output_result( msa_result )
 

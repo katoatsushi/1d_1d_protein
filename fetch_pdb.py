@@ -10,7 +10,6 @@ SHEET = 'sheet'
 # base_aminos = [ 'リシン','アルギニン','ヒスチジン' ]
 # acied_amino = [ 'アスパラギン酸', 'グルタミン酸']
 
-
 def get_secondary_structure_residues(pdb_id, chain_index):
   if (chain_index == " "):
     chain_index = "A"
