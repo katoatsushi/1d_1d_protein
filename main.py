@@ -156,10 +156,7 @@ def output_result(msa_result):
     else:
       appearance_rates_without_asa_only_secondary.append( 0 )
 
-  print(appearance_rates)
-  print(appearance_rates_without_asa)
-  print(appearance_rates_without_asa_only_secondary)
-  return appearance_rates
+  # return appearance_rates
 
   return {
     'appearance_rates': appearance_rates,
@@ -170,11 +167,11 @@ def output_result(msa_result):
 # "./v3.17"以下のフォルダを全て読み込み、該当するFASTAファイルのパスを抽出
 def search_all_file():
   # # ファイルの中身消去
-  f = open(".2022_07_19/appearance_rates.csv","w")
+  f = open("./2022_07_19/appearance_rates.csv","w")
   f.close()
-  f = open(".2022_07_19/appearance_rates_without_asa.csv","w")
+  f = open("./2022_07_19/appearance_rates_without_asa.csv","w")
   f.close()
-  f = open(".2022_07_19/appearance_rates_without_asa_only_secondary.csv","w")
+  f = open("./2022_07_19/appearance_rates_without_asa_only_secondary.csv","w")
   f.close()
 
   files = os.listdir(ROOT_PATH)
