@@ -33,7 +33,6 @@ def get_secondary_structure_residues(pdb_id, chain_index):
   asa_list = []
 
   # APIを叩いた結果を見たい場合は以下コメントアウトを外す
-  
   # PDBでrcsb_polymer_instance_featureがないもの
   if ('rcsb_polymer_instance_feature' in data):
     for feature in data['rcsb_polymer_instance_feature']:
@@ -87,5 +86,7 @@ def get_secondary_structure_residues(pdb_id, chain_index):
 
 
 # あるPDBの情報をAPIで取得する
-get_secondary_structure_residues("2HXA", 'A')
+# get_secondary_structure_residues("2HXA", 'A')
 # "https://data.rcsb.org/rest/v1/core/polymer_entity_instance/2HXA/A"
+
+get_secondary_structure_residues("1CX0", "A")
